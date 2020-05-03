@@ -4,7 +4,7 @@ services:
   ### PHP-FPM ##############################################
   php-fpm:
     build:
-      context: ./php-fpm
+      context: ./__images__/php-fpm
       args:
         - PHP_VERSION=7.3
         - INSTALL_XDEBUG=TRUE
@@ -16,7 +16,7 @@ services:
         - USER_GROUP=1000
     volumes:
       - .:/var/www
-      - ./php-fpm/php7.3.ini:/usr/local/etc/php/php.ini
+      - ./__images__/php-fpm/php7.3.ini:/usr/local/etc/php/php.ini
     expose:
       - "9000"
     networks:
@@ -25,15 +25,15 @@ services:
   ### NGINX Server #########################################
   nginx:
     build:
-      context: ./nginx
+      context: ./__images__/nginx
       args:
         - PHP_UPSTREAM_CONTAINER=php-fpm
         - PHP_UPSTREAM_PORT=9000
     volumes:
       - .:/var/www
-      - ./ngnix/logs:/var/log/nginx
-      - ./nginx/sites/:/etc/nginx/sites-available
-      - ./nginx/ssl/:/etc/nginx/ssl
+      - ./__images__/nginx/logs:/var/log/nginx
+      - ./__images__/nginx/sites/:/etc/nginx/sites-available
+      - ./__images__/nginx/ssl/:/etc/nginx/ssl
     ports:
       - "80:80"
       - "443:443"
@@ -46,7 +46,7 @@ services:
   ### PostgreSQL ###########################################
   postgres:
     build:
-      context: ./postgres
+      context: ./__images__/postgres
       args:
         - POSTGRES_VERSION=alpine
     volumes:
@@ -64,7 +64,7 @@ services:
   ### Adminer ###########################################
   adminer:
     build:
-      context: ./adminer
+      context: ./__images__/adminer
     ports:
       - "8080:8080"
     depends_on:
